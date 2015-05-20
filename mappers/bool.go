@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func Bool(hashName string, request *http.Request) (interface{}, error) {
+func Bool(hashName string, request *http.Request, strict bool) (interface{}, error) {
 
 	value := request.PostForm.Get(hashName)
 

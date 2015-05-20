@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func SliceString(hashName string, request *http.Request) (interface{}, error) {
+func SliceString(hashName string, request *http.Request, strict bool) (interface{}, error) {
 
 	return request.PostForm[fmt.Sprintf("%s[]", hashName)], nil
 }

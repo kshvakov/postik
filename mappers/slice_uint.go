@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func SliceUint(hashName string, request *http.Request) (interface{}, error) {
+func SliceUint(hashName string, request *http.Request, strict bool) (interface{}, error) {
 
 	values := request.PostForm[fmt.Sprintf("%s[]", hashName)]
 

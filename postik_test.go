@@ -10,6 +10,7 @@ import (
 )
 
 func Len(message string, min, max int) Validator {
+
 	return &lenMinMax{
 		message: message,
 		min:     min,
@@ -36,7 +37,7 @@ func (l *lenMinMax) Error() string {
 
 type S struct {
 	Name        string   `form:"name"`
-	Value       int      `form:"value"`
+	Value       int      `form:"value,strict"`
 	CanBe       bool     `form:"can_be"`
 	SliceUint   []uint   `form:"slice_uint"`
 	SliceString []string `form:"slice_string"`
@@ -84,6 +85,7 @@ func TestDev(t *testing.T) {
 			fmt.Printf("%v\n", s)
 
 		} else {
+
 			fmt.Println(req)
 
 			for _, field := range fields {
@@ -91,6 +93,7 @@ func TestDev(t *testing.T) {
 				fmt.Printf("%s err: %s\n", field.Name, field.Error)
 			}
 		}
+
 	} else {
 
 		if e, ok := err.(errors.Error); ok {
@@ -101,9 +104,7 @@ func TestDev(t *testing.T) {
 
 			fmt.Println(err)
 		}
-
 	}
-
 }
 
 func BenchmarkDev(b *testing.B) {

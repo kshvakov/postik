@@ -42,14 +42,14 @@ func New(obj interface{}, salt ...string) *postik {
 			continue
 		}
 
-		if name := tag(fl.Tag.Get(p.Tag)); name != "" && name != "-" {
+		fd := el.Field(i)
 
-			fd := el.Field(i)
+		if fd.Kind() == reflect.Ptr {
 
-			if fd.Kind() == reflect.Ptr {
+			fd = fd.Elem()
+		}
 
-				fd = fd.Elem()
-			}
+		if name, strict := tag(fl.Tag.Get(p.Tag)); name != "" && name != "-" {
 
 			p.fields[name] = &Field{
 				Name:     name,
@@ -57,6 +57,7 @@ func New(obj interface{}, salt ...string) *postik {
 				Value:    fd.Interface(),
 				parent:   fd,
 				mapper:   Map(fd.Interface()),
+				strict:   strict,
 			}
 		}
 	}
@@ -127,12 +128,24 @@ func (p *postik) IsValid() bool {
 	return isValid
 }
 
-func tag(tag string) string {
+func tag(tag string) (string, bool) {
 
 	if tags := strings.Split(tag, ","); len(tags) > 0 {
 
-		return tags[0]
+		var strict bool
+
+		for _, t := range tags {
+
+			if t == "strict" {
+
+				strict = true
+
+				break
+			}
+		}
+
+		return tags[0], strict
 	}
 
-	return ""
+	return "", false
 }

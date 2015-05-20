@@ -13,11 +13,12 @@ type Field struct {
 	validators []Validator
 	parent     reflect.Value
 	mapper     Mapper
+	strict     bool
 }
 
 func (f *Field) ParseForm(request *http.Request) error {
 
-	if value, err := f.mapper(f.HashName, request); err == nil {
+	if value, err := f.mapper(f.HashName, request, f.strict); err == nil {
 
 		f.Value = value
 
