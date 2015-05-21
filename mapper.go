@@ -35,6 +35,7 @@ func init() {
 		reflect.TypeOf(""):           mapper.String,
 		reflect.TypeOf([]string{""}): mapper.SliceString,
 		reflect.TypeOf([]uint{1}):    mapper.SliceUint,
+		reflect.TypeOf([]float32{1}): mapper.SliceFloat32,
 		reflect.TypeOf(true):         mapper.Bool,
 	}
 }

@@ -1,28 +1,31 @@
 package mappers
 
 import (
-	"fmt"
-	"github.com/kshvakov/errors"
 	"net/http"
-	"strconv"
 )
 
 func SliceUint(hashName string, request *http.Request, strict bool) (interface{}, error) {
 
-	values := request.PostForm[fmt.Sprintf("%s[]", hashName)]
+	if values, err := values(hashName, request, strict); err == nil {
 
-	result := make([]uint, 0, len(values))
+		result := make([]uint, 0, len(values))
 
-	for _, val := range values {
+		for _, val := range values {
 
-		if v, err := strconv.ParseUint(val, 10, 0); err == nil {
+			if v, err := parseUint(val, 10, strict); err == nil {
 
-			result = append(result, uint(v))
-		} else {
+				result = append(result, uint(v))
 
-			return nil, errors.Wrap(err)
+			} else {
+
+				return nil, err
+			}
 		}
-	}
 
-	return result, nil
+		return result, nil
+
+	} else {
+
+		return nil, err
+	}
 }

@@ -36,12 +36,14 @@ func (l *lenMinMax) Error() string {
 }
 
 type S struct {
-	Name        string   `form:"name"`
-	Value       int      `form:"value,strict"`
-	CanBe       bool     `form:"can_be"`
-	SliceUint   []uint   `form:"slice_uint"`
-	SliceString []string `form:"slice_string"`
-	NoForm      []uint
+	Name string `form:"name"`
+	//NameStrict   string    `form:"name_strict,strict"`
+	Value        int       `form:"value,strict"`
+	CanBe        bool      `form:"can_be"`
+	SliceUint    []uint    `form:"slice_uint"`
+	SliceFloat32 []float32 `form:"slice_float32"`
+	SliceString  []string  `form:"slice_string"`
+	NoForm       []uint
 }
 
 func TestDev(t *testing.T) {
@@ -57,7 +59,7 @@ func TestDev(t *testing.T) {
 	params.Set("can_be", "true")
 
 	params["slice_uint[]"] = []string{"1", "2", "3", "4", "5"}
-
+	params["slice_float32[]"] = []string{"1.1", "2.2", "3.23", "4.4", "5.5"}
 	params["slice_string[]"] = []string{"s1", "s2", "s3", "s4", "s5"}
 
 	buffer.WriteString(params.Encode())
@@ -111,7 +113,6 @@ func BenchmarkDev(b *testing.B) {
 
 	s := S{Name: "AA", Value: 42}
 
-	p := New(&s)
 	buffer := new(bytes.Buffer)
 
 	params := url.Values{}
@@ -129,7 +130,7 @@ func BenchmarkDev(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		//New().Map(&s)
+		p := New(&s)
 		p.ParseForm(req)
 		p.IsValid()
 	}

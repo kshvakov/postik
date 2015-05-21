@@ -1,14 +1,15 @@
 package mappers
 
 import (
+	"fmt"
 	"github.com/kshvakov/errors"
 	"net/http"
 	"strconv"
 )
 
-func parseInt(hashName string, request *http.Request, bitSize int, strict bool) (int64, error) {
+func parseInt(value string, bitSize int, strict bool) (int64, error) {
 
-	if value, err := strconv.ParseInt(request.PostForm.Get(hashName), 10, bitSize); strict && err != nil {
+	if value, err := strconv.ParseInt(value, 10, bitSize); strict && err != nil {
 
 		return 0, errors.Wrap(err)
 
@@ -18,14 +19,31 @@ func parseInt(hashName string, request *http.Request, bitSize int, strict bool) 
 	}
 }
 
-func parseUint(hashName string, request *http.Request, bitSize int, strict bool) (uint64, error) {
+func parseUint(value string, bitSize int, strict bool) (uint64, error) {
 
-	if value, err := strconv.ParseUint(request.PostForm.Get(hashName), 10, bitSize); strict && err != nil {
+	if value, err := strconv.ParseUint(value, 10, bitSize); strict && err != nil {
 
 		return 0, errors.Wrap(err)
 
 	} else {
 
 		return value, nil
+	}
+}
+
+func values(hashName string, request *http.Request, strict bool) ([]string, error) {
+
+	if values, found := request.PostForm[fmt.Sprintf("%s[]", hashName)]; found {
+
+		return values, nil
+
+	} else {
+
+		if strict {
+
+			return nil, errors.New("value not found")
+		}
+
+		return []string{}, nil
 	}
 }
