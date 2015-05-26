@@ -11,11 +11,18 @@ const (
 	DefaultTag = "form"
 )
 
-func New(obj interface{}, salt ...string) *postik {
+func New(obj interface{}, params ...string) *postik {
+
+	t := DefaultTag
+
+	if len(params) > 1 {
+
+		t = params[1]
+	}
 
 	p := &postik{
-		Tag:    DefaultTag,
-		salt:   strings.Join(salt, "."),
+		Tag:    t,
+		salt:   strings.Join(params, "."),
 		fields: make(map[string]*Field),
 	}
 
