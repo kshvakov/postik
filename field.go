@@ -10,6 +10,7 @@ type Field struct {
 	HashName   string
 	Value      interface{}
 	Error      string
+	Required   bool
 	validators []Validator
 	parent     reflect.Value
 	mapper     Mapper

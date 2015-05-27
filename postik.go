@@ -94,6 +94,18 @@ func (p *postik) SetValidators(validators map[string][]Validator) {
 
 		if field, found := p.fields[name]; found {
 
+			empty := reflect.TypeOf(&notEmpty{})
+
+			for _, r := range v {
+
+				if empty == reflect.TypeOf(r) {
+
+					field.Required = true
+
+					break
+				}
+			}
+
 			field.validators = v
 		}
 	}
