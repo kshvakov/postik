@@ -13,16 +13,26 @@ const (
 
 func New(obj interface{}, params ...string) *postik {
 
-	t := DefaultTag
+	var (
+		t = DefaultTag
+		s = ""
+	)
 
-	if len(params) > 1 {
+	switch len(params) {
+	case 1:
 
+		s = params[0]
+
+	case 2:
+
+		s = params[0]
 		t = params[1]
+
 	}
 
 	p := &postik{
 		Tag:    t,
-		salt:   strings.Join(params, "."),
+		salt:   s,
 		fields: make(map[string]*Field),
 	}
 
@@ -139,19 +149,15 @@ func tag(tag string) (string, bool) {
 
 	if tags := strings.Split(tag, ","); len(tags) > 0 {
 
-		var strict bool
-
 		for _, t := range tags {
 
 			if t == "strict" {
 
-				strict = true
-
-				break
+				return tags[0], true
 			}
 		}
 
-		return tags[0], strict
+		return tags[0], false
 	}
 
 	return "", false
