@@ -8,7 +8,7 @@ func Int16(hashName string, request *http.Request, strict bool) (interface{}, er
 
 	if value, err := parseInt(request.PostForm.Get(hashName), 16, strict); err == nil {
 
-		return int(value), nil
+		return int16(value), nil
 
 	} else {
 

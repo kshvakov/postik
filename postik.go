@@ -31,7 +31,7 @@ func New(obj interface{}, params ...string) *postik {
 	}
 
 	p := &postik{
-		Tag:    t,
+		tag:    t,
 		salt:   s,
 		fields: make(map[string]*Field),
 	}
@@ -66,7 +66,7 @@ func New(obj interface{}, params ...string) *postik {
 			fd = fd.Elem()
 		}
 
-		if name, strict := tag(fl.Tag.Get(p.Tag)); name != "" && name != "-" {
+		if name, strict := tag(fl.Tag.Get(p.tag)); name != "" && name != "-" {
 
 			p.fields[name] = &Field{
 				Name:     name,
@@ -83,7 +83,7 @@ func New(obj interface{}, params ...string) *postik {
 }
 
 type postik struct {
-	Tag    string
+	tag    string
 	salt   string
 	fields map[string]*Field
 }
