@@ -1,6 +1,7 @@
 package postik
 
 import (
+	"fmt"
 	"net/http"
 	"reflect"
 )
@@ -29,6 +30,24 @@ func (f *Field) ParseForm(request *http.Request) error {
 
 		return err
 	}
+}
+
+func (f *Field) In(v interface{}) bool {
+
+	if reflect.TypeOf(f.Value).Kind() == reflect.Slice {
+
+		slice := reflect.ValueOf(f.Value)
+
+		for i := 0; i < slice.Len(); i++ {
+
+			if fmt.Sprint(slice.Index(i).Interface()) == fmt.Sprint(v) {
+
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 func (f *Field) IsValid() bool {
