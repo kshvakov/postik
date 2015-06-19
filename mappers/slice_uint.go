@@ -12,7 +12,7 @@ func SliceUint(hashName string, request *http.Request, strict bool) (interface{}
 
 		for _, val := range values {
 
-			if v, err := parseUint(val, 10, strict); err == nil {
+			if v, err := parseUint(val, 0, strict); err == nil {
 
 				result = append(result, uint(v))
 
