@@ -83,9 +83,10 @@ func New(obj interface{}, params ...string) *postik {
 }
 
 type postik struct {
-	tag    string
-	salt   string
-	fields map[string]*Field
+	tag          string
+	salt         string
+	excludeNames []string
+	fields       map[string]*Field
 }
 
 func (p *postik) SetValidators(validators map[string][]Validator) {
@@ -111,9 +112,27 @@ func (p *postik) SetValidators(validators map[string][]Validator) {
 	}
 }
 
+func (p *postik) ExcludeNames(names ...string) {
+
+	p.excludeNames = names
+}
+
 func (p *postik) Fields() map[string]*Field {
 
 	return p.fields
+}
+
+func (p *postik) exclude(name string) bool {
+
+	for _, n := range p.excludeNames {
+
+		if n == name {
+
+			return true
+		}
+	}
+
+	return false
 }
 
 func (p *postik) ParseForm(request *http.Request) error {
@@ -123,11 +142,14 @@ func (p *postik) ParseForm(request *http.Request) error {
 		return err
 	}
 
-	for _, field := range p.fields {
+	for name, field := range p.fields {
 
-		if err := field.ParseForm(request); err != nil {
+		if !p.exclude(name) {
 
-			return err
+			if err := field.ParseForm(request); err != nil {
+
+				return err
+			}
 		}
 	}
 
@@ -138,9 +160,9 @@ func (p *postik) IsValid() bool {
 
 	isValid := true
 
-	for _, field := range p.fields {
+	for name, field := range p.fields {
 
-		if !field.IsValid() {
+		if !p.exclude(name) && !field.IsValid() {
 
 			isValid = false
 		}
@@ -148,9 +170,12 @@ func (p *postik) IsValid() bool {
 
 	if isValid {
 
-		for _, field := range p.fields {
+		for name, field := range p.fields {
 
-			field.parent.Set(reflect.ValueOf(field.Value))
+			if !p.exclude(name) {
+
+				field.parent.Set(reflect.ValueOf(field.Value))
+			}
 		}
 	}
 
