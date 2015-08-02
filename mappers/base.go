@@ -2,7 +2,6 @@ package mappers
 
 import (
 	"fmt"
-	"github.com/kshvakov/errors"
 	"net/http"
 	"strconv"
 )
@@ -11,7 +10,7 @@ func parseInt(value string, bitSize int, strict bool) (int64, error) {
 
 	if value, err := strconv.ParseInt(value, 10, bitSize); strict && err != nil {
 
-		return 0, errors.Wrap(err)
+		return 0, err
 
 	} else {
 
@@ -23,7 +22,7 @@ func parseUint(value string, bitSize int, strict bool) (uint64, error) {
 
 	if value, err := strconv.ParseUint(value, 10, bitSize); strict && err != nil {
 
-		return 0, errors.Wrap(err)
+		return 0, err
 
 	} else {
 
@@ -41,7 +40,7 @@ func values(hashName string, request *http.Request, strict bool) ([]string, erro
 
 		if strict {
 
-			return nil, errors.New("value not found")
+			return nil, fmt.Errorf("key '%s' not found", hashName)
 		}
 
 		return []string{}, nil

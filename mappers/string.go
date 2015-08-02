@@ -1,7 +1,7 @@
 package mappers
 
 import (
-	"github.com/kshvakov/errors"
+	"fmt"
 	"net/http"
 )
 
@@ -9,7 +9,7 @@ func String(hashName string, request *http.Request, strict bool) (interface{}, e
 
 	if _, found := request.PostForm[hashName]; !found && strict {
 
-		return nil, errors.New("value not found")
+		return nil, fmt.Errorf("key '%s' not found", hashName)
 	}
 
 	return request.PostForm.Get(hashName), nil

@@ -1,7 +1,6 @@
 package mappers
 
 import (
-	"github.com/kshvakov/errors"
 	"net/http"
 	"strconv"
 )
@@ -10,7 +9,7 @@ func Float64(hashName string, request *http.Request, strict bool) (interface{}, 
 
 	if value, err := strconv.ParseFloat(request.PostForm.Get(hashName), 64); strict && err != nil {
 
-		return 0, errors.Wrap(err)
+		return 0, err
 
 	} else {
 

@@ -1,7 +1,6 @@
 package mappers
 
 import (
-	"github.com/kshvakov/errors"
 	"net/http"
 	"strconv"
 )
@@ -22,7 +21,7 @@ func SliceFloat32(hashName string, request *http.Request, strict bool) (interfac
 
 				if strict {
 
-					return nil, errors.Wrap(err)
+					return nil, err
 				}
 			}
 		}
