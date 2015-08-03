@@ -113,5 +113,6 @@ func TestBuiltinTypes(t *testing.T) {
 		assert.Equal(t, float64(math.MaxFloat64), data.MaxFloat64)
 
 		//fmt.Printf("%#v\n", data)
+
 	}
 }
